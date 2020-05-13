@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import java.sql.*;
+
 
 public class MainScreen {
     // Creates the elements and global variables
@@ -13,6 +15,10 @@ public class MainScreen {
 
     private String newAccount;
     private String newAccountType;
+
+    //Database stuff
+    private static Connection con;
+    private static boolean hasData = false;
 
 
     public MainScreen() {

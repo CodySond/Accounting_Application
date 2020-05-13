@@ -62,6 +62,46 @@ public class MainScreen {
         });
     }
 
+    /* DATABASE FUNCTIONS */
+    public ResultSet displayAccounts() throws SQLException, ClassNotFoundException {
+        if(con == null) {
+            getConnection();
+        }
+
+        Statement state = con.createStatement();
+        ResultSet res = state.executeQuery("SELECT aname FROM accounts");
+        return res;
+    }
+
+    private void getConnection() throws SQLException, ClassNotFoundException {
+        Class.forName("org.h2.Driver");
+        con = DriverManager.getConnection("jdbc:h2:~/AccountingApp.db");
+        initialize();
+    }
+
+    private void initialize() throws SQLException {
+        if (!hasData){
+            hasData = true;
+
+            Statement state = con.createStatement();
+            ResultSet res = state.executeQuery("SELECT name FROM AccountingApp.TABLES WHERE type='table' AND name='accounts'"); // NOTE: NOT SURE IF THIS ACTUALLY WORKS OR NOT
+            if(!res.next()){
+
+                //Build table
+                Statement state2 = con.createStatement();
+                state2.execute("CREATE TABLE accounts(id integer,"
+                + "aname varchar(60)," + "atype varchar(60)," + "avalue integer,"
+                + "primary key(id));");
+
+                //Insert default data
+                PreparedStatement prep = con.prepareStatement("INSERT INFO accounts(?,?,?,?);");
+                prep.setString(2, "");
+            }
+        }
+    }
+
+
+    /* MAIN METHOD */
     public static void main(String[] args){
         // Creates new frame to run this in
         JFrame frame = new JFrame("App");

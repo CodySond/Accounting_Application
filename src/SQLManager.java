@@ -55,10 +55,10 @@ public class SQLManager {
             getConnection();
         }
 
-        PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(?,?,?,?);");
-        prep.setString(2, accountName);
-        prep.setString(3, accountType);
-        prep.setInt(4, accountValue);
+        PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(aname,atype,avalue) VALUES(?,?,?);");
+        prep.setString(1, accountName);
+        prep.setString(2, accountType);
+        prep.setInt(3, accountValue);
         prep.execute();
     }
 }

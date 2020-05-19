@@ -21,6 +21,7 @@ public class MainScreen {
 
     public MainScreen() {
         // TODO: Make display graphs for comparing income & expenses
+        // Note: probably use JFreeChart
 
         /*
 
@@ -35,6 +36,7 @@ public class MainScreen {
                 // Shows a pop out window that shows the message
                 JOptionPane.showMessageDialog(null, "Hello");
                 // TODO: (After database has been made) Transaction input screen. Type account name first, which is verified by array containing all account names from database, then amount
+                // Note: Could do new window similar to this one in order to have a list of radio buttons to select account
             }
         });
 
@@ -57,6 +59,7 @@ public class MainScreen {
                 JOptionPane.showMessageDialog(null, newAccount + " will be a " + newAccountType + ".");
 
                 //TODO: Create database to store the accounts and their current values in
+                // Database done, need to add in "add account" functionality
             }
         });
     }

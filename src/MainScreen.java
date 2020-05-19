@@ -21,6 +21,7 @@ public class MainScreen {
 
     public MainScreen() {
         // TODO: Make display graphs for comparing income & expenses
+
         /*
 
         BUTTON CLICK EVENTS HERE

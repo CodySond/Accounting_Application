@@ -24,7 +24,6 @@ public class SQLManager {
     }
 
     private void initialize() throws SQLException {
-        // TODO: Make way to detect if it has data
         if (!hasData){
             hasData = true;
 
@@ -34,12 +33,12 @@ public class SQLManager {
                 System.out.println("Building sample database");
                 //Build table
                 Statement state2 = con.createStatement();
-                state2.execute("CREATE TABLE IF NOT EXISTS accounts(id INT PRIMARY KEY AUTO_INCREMENT,"
+                state2.execute("CREATE TABLE IF NOT EXISTS accounts(id bigint auto_increment,"
                         + "aname VARCHAR(60)," + "atype VARCHAR(60)," + "avalue INT);"
                         /*+ "primary key(id));"*/);
 
                 //Insert default data
-                PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(id,aname,atype,avalue) VALUES(0,'Revenue', 'revenue', 0);");
+                PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(aname,atype,avalue) VALUES('Revenue', 'revenue', 0);");
                 prep.execute();
                 /*
                 prep.setString(2, "Revenue");

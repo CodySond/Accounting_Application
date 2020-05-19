@@ -58,7 +58,7 @@ public class MainScreen {
                 // Show pop out window with name that user inputted
                 JOptionPane.showMessageDialog(null, newAccount + " will be a " + newAccountType + ".");
 
-                //TODO: Create database to store the accounts and their current values in
+                // TODO: Create database to store the accounts and their current values in
                 // Database done, need to add in "add account" functionality
             }
         });

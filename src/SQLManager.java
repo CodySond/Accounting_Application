@@ -38,13 +38,14 @@ public class SQLManager {
                         /*+ "primary key(id));"*/);
 
                 //Insert default data
-                PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(aname,atype,avalue) VALUES('Revenue', 'revenue', 0);");
-                prep.execute();
-                /*
-                prep.setString(2, "Revenue");
-                prep.setString(3, "revenue");
+                PreparedStatement prep = con.prepareStatement("INSERT INTO accounts(aname,atype,avalue) VALUES(?,?,?);");
+                //prep.execute();
+                ///*
+                prep.setString(1, "Revenue");
+                prep.setString(2, "revenue");
                 prep.setInt(3, 0);
-                */
+                prep.execute();
+                //*/
             }
         }
         System.out.println("Database exists. Initialization complete");
@@ -61,4 +62,6 @@ public class SQLManager {
         prep.setInt(3, accountValue);
         prep.execute();
     }
+    // TODO: IMPORTANT: FIND WAY TO CLOSE CONNECTION AND STATEMENTS!
+
 }

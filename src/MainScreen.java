@@ -49,7 +49,9 @@ public class MainScreen {
 
                 // Shows new pop out to allow the user to specify the type of account
                 newAccountType = JOptionPane.showInputDialog(null, "What type would you like " + newAccount + " to be? Revenue, expense, asset, or liability?");
+                // Ensures that case matches what we are expecting
                 newAccountType = newAccountType.toLowerCase();
+                // Checks that the input account type is something we know how to handle (will bypass if so, will ask again if not)
                 while(!newAccountType.equals("revenue") && !newAccountType.equals("expense") && !newAccountType.equals("asset") && !newAccountType.equals("liability")){
                     newAccountType = JOptionPane.showInputDialog(null, "Input not recognized. Input the type exactly as shown below: \nRevenue\nExpense\nAsset\nLiability");
                     newAccountType = newAccountType.toLowerCase();
@@ -58,8 +60,20 @@ public class MainScreen {
                 // Show pop out window with name that user inputted
                 JOptionPane.showMessageDialog(null, newAccount + " will be a " + newAccountType + ".");
 
-                // TODO: Create database to store the accounts and their current values in
-                // Database done, need to add in "add account" functionality
+                // Add account to database
+
+                // Sets up dataManager object
+                SQLManager dataManager = new SQLManager();
+
+                try {
+                    dataManager.addAccount(newAccount, newAccountType, 0);
+                } catch (SQLException throwables) { // Catches SQLException errors
+                    throwables.printStackTrace(); // Prints error to console
+                } catch (ClassNotFoundException ex) { // Catches ClassNotFoundException errors
+                    ex.printStackTrace(); // Prints error to console
+                } finally { // Runs after everything else in the try catch structure has run
+                    dataManager = null; // Closes out the dataManager object
+                }
             }
         });
     }
@@ -67,20 +81,26 @@ public class MainScreen {
 
     /* MAIN METHOD */
     public static void main(String[] args){
+        // Initializing objects to display accounts in command line
         SQLManager dataManager = new SQLManager();
         ResultSet rs;
 
         try {
+            // Sets the result set rs to be whatever displayAccounts() returns
             rs = dataManager.displayAccounts();
+
+            // Loop until you have gone through every row in the ResultSet table
             while(rs.next()){
+                // Prints the account name, type, and value for the current row
                 System.out.println(rs.getString("ANAME") + " " + rs.getString("ATYPE") + " " + rs.getInt("AVALUE"));
             }
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            throwables.printStackTrace(); // Prints error message to console
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Prints error message to console
         }
 
+        /* DISPLAY STUFF */
 
         // Creates new frame to run this in
         JFrame frame = new JFrame("App");

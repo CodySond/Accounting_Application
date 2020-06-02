@@ -1,3 +1,4 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class SQLManager {
@@ -93,6 +94,58 @@ public class SQLManager {
 
                 //*/
             }
+            state.close();
+
+            // Creating transaction database
+            Statement stateTrans = con.createStatement();
+            ResultSet resTrans = stateTrans.executeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='TABLE' AND TABLE_NAME='TRANSACTIONS_JOURNAL'");
+
+            if(!resTrans.next()){
+                System.out.println("Building journal database");
+
+                // Build table
+                Statement state3 = null;
+                try{
+                    state3 = con.createStatement();
+                    state3.execute("CREATE TABLE IF NOT EXISTS transactions_journal(id bigint auto_increment,"
+                    + "dacct1 VARCHAR(60)," + "dval1 DECIMAL(8,2)," + "dacct2 VARCHAR(60)," + "dval2 DECIMAL(8,2),"
+                    + "dacct3 VARCHAR(60)," + "dval3 DECIMAL(8,2)," + "dacct4 VARCHAR(60)," + "dval4 DECIMAL(8,2),"
+                    + "dacct5 VARCHAR(60)," + "dval5 DECIMAL(8,2)," + "cacct1 VARCHAR(60)," + "cval1 DECIMAL(8,2),"
+                    + "cacct2 VARCHAR(60)," + "cval2 DECIMAL(8,2)," + "cacct3 VARCHAR(60)," + "cval3 DECIMAL(8,2),"
+                    + "cacct4 VARCHAR(60)," + "cval4 DECIMAL(8,2)," + "cacct5 VARCHAR(60)," + "cval5 DECIMAL(8,2),"
+                    + "descr MEDIUMTEXT," + "transdate DATE," + "transtime TIME);");
+                } finally {
+                    try { state3.close(); } catch (SQLException ex) { }
+                }
+                System.out.println("Journal database created");
+            }
+
+            stateTrans.close();
+
+
+            Statement stateTransSimple = con.createStatement();
+            ResultSet resTransSimple = stateTransSimple.executeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='TABLE' AND TABLE_NAME='TRANS_JOURNAL_SIMPLE'");
+
+            if(!resTransSimple.next()){
+                System.out.println("Building simple journal database");
+
+                // Build table
+                Statement state4 = null;
+                try{
+                    state4 = con.createStatement();
+                    state4.execute("CREATE TABLE IF NOT EXISTS trans_journal_simple(id bigint auto_increment,"
+                    + "acct1 VARCHAR(60)," + "val1 DECIMAL(8,2)," + "acct2 VARCHAR(60)," + "val2 DECIMAL(8,2),"
+                    + "acct3 VARCHAR(60)," + "val3 DECIMAL(8,2)," + "acct4 VARCHAR(60)," + "val4 DECIMAL(8,2),"
+                    + "acct5 VARCHAR(60)," + "val5 DECIMAL(8,2)," + "acct6 VARCHAR(60)," + "val6 DECIMAL(8,2),"
+                    + "acct7 VARCHAR(60)," + "val7 DECIMAL(8,2)," + "acct8 VARCHAR(60)," + "val8 DECIMAL(8,2),"
+                    + "acct9 VARCHAR(60)," + "val9 DECIMAL(8,2)," + "acct10 VARCHAR(60)," + "val10 DECIMAL(8,2),"
+                    + "descr MEDIUMTEXT," + "transdate DATE," + "transtime TIME);");
+                } finally {
+                    try { state4.close(); } catch(SQLException e) { }
+                }
+            }
+
+            stateTransSimple.close();
         }
 
         // Debugging console output

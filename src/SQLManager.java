@@ -1,5 +1,6 @@
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
+import java.time.*;
 
 public class SQLManager {
 
@@ -181,6 +182,69 @@ public class SQLManager {
         }
 
     }
+
+    public void addTransaction(String debAcct1, double debAmt1, String debAcct2, double debAmt2, String debAcct3, double debAmt3, String debAcct4, double debAmt4,
+                               String debAcct5, double debAmt5, String credAcct1, double credAmt1, String credAcct2, double credAmt2, String credAcct3, double credAmt3,
+                               String credAcct4, double credAmt4, String credAcct5, double credAmt5, String descr){
+        try {
+            if(con == null) {
+                getConnection();
+            }
+        } catch(SQLException e) { } catch(ClassNotFoundException e) { }
+
+        PreparedStatement prep = null;
+        try {
+            // Create statement
+            prep = con.prepareStatement("INSERT INTO TRANSACTIONS_JOURNAL(dacct1,dval1,dacct2,dval2,dacct3,dval3,dacct4,dval4,dacct5,dval5,cacct1,cval1,cacct2,cval2," +
+                    "cacct3,cval3,cacct4,cval4,cacct5,cval5,descr,transdate,transtime) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+
+            // Fill values into statement
+                //Debit section
+            prep.setString(1, debAcct1);
+            prep.setDouble(2, debAmt1);
+            prep.setString(3, debAcct2);
+            prep.setDouble(4, debAmt2);
+            prep.setString(5, debAcct3);
+            prep.setDouble(6, debAmt3);
+            prep.setString(7, debAcct4);
+            prep.setDouble(8, debAmt4);
+            prep.setString(9, debAcct5);
+            prep.setDouble(10, debAmt5);
+
+                //Credit section
+            prep.setString(11, credAcct1);
+            prep.setDouble(12, credAmt1);
+            prep.setString(13, credAcct2);
+            prep.setDouble(14, credAmt2);
+            prep.setString(15, credAcct3);
+            prep.setDouble(16, credAmt3);
+            prep.setString(17, credAcct4);
+            prep.setDouble(18, credAmt4);
+            prep.setString(19, credAcct5);
+            prep.setDouble(20, credAmt5);
+
+                //Other section
+            prep.setString(21, descr);
+
+            // TODO: Input date into database
+            LocalDate CurrentDate = LocalDate.now(); // Get the current date, supposedly supported by H2
+            prep.setObject(22, CurrentDate);
+
+            LocalTime CurrentTime = LocalTime.now(); // Get current time
+            prep.setObject(23, CurrentTime);
+
+            prep.execute();
+
+            CurrentDate = null;
+            CurrentTime = null;
+
+        } catch(SQLException e) { } finally {
+            try{ prep.close(); } catch(SQLException e) { }
+            try{ con.close(); } catch(SQLException e) { }
+        }
+
+    }
+
     // TODO: IMPORTANT: FIND WAY TO CLOSE CONNECTION AND STATEMENTS!
     // Mostly done, only need to figure out way to do it for returning ResultSet for displayAccounts()
 

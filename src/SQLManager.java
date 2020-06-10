@@ -154,7 +154,6 @@ public class SQLManager {
     }
 
     // "addAccount(...)" is used to add new accounts to the database
-    // TODO: "addTransaction(...)" method; should be very similar to "addAccount(...)"
     public void addAccount(String accountName, String accountType, int accountValue) throws SQLException, ClassNotFoundException {
         // Checks for database connection. If it doesn't exist, it connects to database
         if(con == null){
@@ -193,6 +192,7 @@ public class SQLManager {
         } catch(SQLException e) { } catch(ClassNotFoundException e) { }
 
         PreparedStatement prep = null;
+        PreparedStatement prepSimpleJournal = null;
         try {
             // Create statement
             prep = con.prepareStatement("INSERT INTO TRANSACTIONS_JOURNAL(dacct1,dval1,dacct2,dval2,dacct3,dval3,dacct4,dval4,dacct5,dval5,cacct1,cval1,cacct2,cval2," +
@@ -226,7 +226,6 @@ public class SQLManager {
                 //Other section
             prep.setString(21, descr);
 
-            // TODO: Input date into database
             LocalDate CurrentDate = LocalDate.now(); // Get the current date, supposedly supported by H2
             prep.setObject(22, CurrentDate);
 
@@ -237,6 +236,81 @@ public class SQLManager {
 
             CurrentDate = null;
             CurrentTime = null;
+
+            /* Simplified journal & accounts update */
+
+            // Setting up objects for section
+            ResultSet AccountsSet = null;
+            String[] transAccountNames = {debAcct1,debAcct2,debAcct3,debAcct4,debAcct5,credAcct1,credAcct2,credAcct3,credAcct4,credAcct5};
+            double[] transValues = {debAmt1,debAmt2,debAmt3,debAmt4,debAmt5,credAmt1,credAmt2,credAmt3,credAmt4,credAmt5};
+
+            try{ AccountsSet = displayAccounts(); } catch (SQLException e) { } catch (ClassNotFoundException e) { }
+            if(AccountsSet != null) {
+                while (AccountsSet.next()){
+                    String CurrentAccountSelected = AccountsSet.getString("ANAME");
+                    String DebitOrCreditSide = AccountsSet.getString("ATYPE");
+
+                    // Put variables into an array, such that can iterate through in for loop
+                    for (int i = 0; i<10; i++) {
+                        if(CurrentAccountSelected.equals(transAccountNames[i])){
+                            if(DebitOrCreditSide.equals("debit")){
+                                // Add debAmt1 to AVALUE
+                                // To add, retrieve integer from table ("AccountsSet.getInt("AVALUE")") and store as variable
+                                // Add debAmt1 to that value from table as variable newvalue
+                                // Update value in table ("UPDATE ACCOUNTS SET AVALUE=" + newvalue + " WHERE ANAME =" + CurrentAccountSelected)
+                                // Put this into the the simplified journal as well (just record account name, change (+/-), date, and time
+                                // Use transaction id maybe? To ease troubleshooting and connect the 2 tables more clearly
+
+                                double newValue;
+                                Statement stateTransAndAccountUpdate = con.createStatement();
+                                if(i<5){ // Check if it is in the debit side
+                                    double currentValue = AccountsSet.getDouble("AVALUE");
+                                    newValue = currentValue + transValues[i];
+                                    try {
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                    } finally {
+                                        stateTransAndAccountUpdate.close();
+                                    }
+                                } else { // If it is on the credit side
+                                    double currentValue = AccountsSet.getDouble("AVALUE");
+                                    newValue = currentValue - transValues[i];
+                                    try {
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                    } finally {
+                                        stateTransAndAccountUpdate.close();
+                                    }
+                                }
+
+                            } else if(DebitOrCreditSide.equals("credit")){
+                                // Subtract debAmt1 from AVALUE
+                                // See method set out above
+
+                                double newValue;
+                                Statement stateTransAndAccountUpdate = con.createStatement();
+                                if(i>5){ // Check if it is in the credit side
+                                    double currentValue = AccountsSet.getDouble("AVALUE");
+                                    newValue = currentValue + transValues[i];
+                                    try {
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                    } finally {
+                                        stateTransAndAccountUpdate.close();
+                                    }
+                                } else { // If it is on the debit side
+                                    double currentValue = AccountsSet.getDouble("AVALUE");
+                                    newValue = currentValue - transValues[i];
+                                    try {
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                    } finally {
+                                        stateTransAndAccountUpdate.close();
+                                    }
+                                }
+                            } else {
+                                System.out.println("Error: No debit or credit classification found");
+                            }
+                        }
+                    }
+                }
+            }
 
         } catch(SQLException e) { } finally {
             try{ prep.close(); } catch(SQLException e) { }

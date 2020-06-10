@@ -38,10 +38,15 @@ public class MainScreen {
                 // TODO: (After database has been made) Transaction input screen. Type account name first, which is verified by array containing all account names from database, then amount
                 // Note: Could do new window similar to this one in order to have a list of radio buttons to select account
                 SQLManager dataManager = new SQLManager();
+                ResultSet accountsSet;
                 try{
-                    dataManager.addTransaction("a", 1.0, "b", 2.05, "c", 3.15, "d", 4.25, "e",
-                            5.15, "ca", 456.50, "cb", 243.45, "cc", 4.45, "cd", 43.56,
-                            "ce", 5.78, "This is a sample description");
+                    accountsSet = dataManager.displayAccounts();
+
+
+                } catch (SQLException Exception) {
+
+                } catch (ClassNotFoundException Exception) {
+
                 } finally {
                     dataManager = null;
                 }

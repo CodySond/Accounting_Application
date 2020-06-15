@@ -2,6 +2,9 @@ import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.*;
 
+// TODO: Either add in error correction to correct floating point errors with the stored value of accounts or change the value to represent cents (only 3 countries use thousandths of currency)
+// Re: above note: possibly not necessary, as it seems that floating point is accurate for addition and subtraction with the two decimal places that this uses.
+
 public class SQLManager {
 
     //Database stuff
@@ -244,15 +247,16 @@ public class SQLManager {
             String[] transAccountNames = {debAcct1,debAcct2,debAcct3,debAcct4,debAcct5,credAcct1,credAcct2,credAcct3,credAcct4,credAcct5};
             double[] transValues = {debAmt1,debAmt2,debAmt3,debAmt4,debAmt5,credAmt1,credAmt2,credAmt3,credAmt4,credAmt5};
 
+            // Figure out what accounts exist
             try{ AccountsSet = displayAccounts(); } catch (SQLException e) { } catch (ClassNotFoundException e) { }
-            if(AccountsSet != null) {
-                while (AccountsSet.next()){
-                    String CurrentAccountSelected = AccountsSet.getString("ANAME");
-                    String DebitOrCreditSide = AccountsSet.getString("ATYPE");
+            if(AccountsSet != null) { // If the try block above succeeded
+                while (AccountsSet.next()){ // Loop through all the accounts in the accounts set
+                    String CurrentAccountSelected = AccountsSet.getString("ANAME"); // Get name of currently selected account
+                    String DebitOrCreditSide = AccountsSet.getString("ATYPE"); // Get type of currently selected account
 
                     // Put variables into an array, such that can iterate through in for loop
                     for (int i = 0; i<10; i++) {
-                        if(CurrentAccountSelected.equals(transAccountNames[i])){
+                        if(CurrentAccountSelected.equals(transAccountNames[i])){ // Check if the account from the set is one of the transaction accounts
                             if(DebitOrCreditSide.equals("debit")){
                                 // Add debAmt1 to AVALUE
                                 // To add, retrieve integer from table ("AccountsSet.getInt("AVALUE")") and store as variable

@@ -29,6 +29,7 @@ public class TransactionInput extends JDialog {
     private JSpinner spinner8;
     private JSpinner spinner9;
     private JSpinner spinner10;
+    private JTextArea textArea1;
 
     public TransactionInput() {
         setContentPane(contentPane);
@@ -104,7 +105,36 @@ public class TransactionInput extends JDialog {
     }
 
     private void onOK() {
-        // add your code here
+        SQLManager dataManager;
+
+        try {
+            dataManager = new SQLManager();
+
+            String debAcct1 = String.valueOf(comboBox1.getSelectedItem());
+            String debAcct2 = String.valueOf(comboBox2.getSelectedItem());
+            String debAcct3 = String.valueOf(comboBox3.getSelectedItem());
+            String debAcct4 = String.valueOf(comboBox4.getSelectedItem());
+            String debAcct5 = String.valueOf(comboBox5.getSelectedItem());
+            String credAcct1 = String.valueOf(comboBox6.getSelectedItem());
+            String credAcct2 = String.valueOf(comboBox7.getSelectedItem());
+            String credAcct3 = String.valueOf(comboBox8.getSelectedItem());
+            String credAcct4 = String.valueOf(comboBox9.getSelectedItem());
+            String credAcct5 = String.valueOf(comboBox10.getSelectedItem());
+
+            System.out.println(debAcct1);
+            System.out.println(debAcct2);
+            System.out.println(debAcct3);
+            System.out.println(debAcct4);
+            System.out.println(debAcct5);
+            System.out.println(credAcct1);
+            System.out.println(credAcct2);
+            System.out.println(credAcct3);
+            System.out.println(credAcct4);
+            System.out.println(credAcct5);
+        } finally {
+            dataManager = null;
+        }
+
         dispose();
     }
 

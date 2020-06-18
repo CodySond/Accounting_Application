@@ -19,17 +19,17 @@ public class TransactionInput extends JDialog {
     private JComboBox comboBox9;
     private JComboBox comboBox10;
     private JPanel transactionValueInputPane;
-    private JSpinner spinner1;
-    private JSpinner spinner2;
-    private JSpinner spinner3;
-    private JSpinner spinner4;
-    private JSpinner spinner5;
-    private JSpinner spinner6;
-    private JSpinner spinner7;
-    private JSpinner spinner8;
-    private JSpinner spinner9;
-    private JSpinner spinner10;
     private JTextArea textArea1;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
+    private JTextField textField5;
+    private JTextField textField6;
+    private JTextField textField7;
+    private JTextField textField8;
+    private JTextField textField9;
+    private JTextField textField10;
 
     public TransactionInput() {
         setContentPane(contentPane);
@@ -62,6 +62,17 @@ public class TransactionInput extends JDialog {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        textField1.setText("0");
+        textField2.setText("0");
+        textField3.setText("0");
+        textField4.setText("0");
+        textField5.setText("0");
+        textField6.setText("0");
+        textField7.setText("0");
+        textField8.setText("0");
+        textField9.setText("0");
+        textField10.setText("0");
 
         // Setup combo boxes (drop-down menus)
         comboBox1.addItem(" ");
@@ -106,20 +117,47 @@ public class TransactionInput extends JDialog {
 
     private void onOK() {
         SQLManager dataManager;
+        boolean onlyAcceptedCharacters = true;
+
+        String debAcct1 = " ";
+        String debAcct2 = " ";
+        String debAcct3 = " ";
+        String debAcct4 = " ";
+        String debAcct5 = " ";
+        String credAcct1 = " ";
+        String credAcct2 = " ";
+        String credAcct3 = " ";
+        String credAcct4 = " ";
+        String credAcct5 = " ";
+
+        double debAmt1 = 0;
+        double debAmt2 = 0;
+        double debAmt3 = 0;
+        double debAmt4 = 0;
+        double debAmt5 = 0;
+        double credAmt1 = 0;
+        double credAmt2 = 0;
+        double credAmt3 = 0;
+        double credAmt4 = 0;
+        double credAmt5 = 0;
+
+        String descrip = " ";
 
         try {
             dataManager = new SQLManager();
 
-            String debAcct1 = String.valueOf(comboBox1.getSelectedItem());
-            String debAcct2 = String.valueOf(comboBox2.getSelectedItem());
-            String debAcct3 = String.valueOf(comboBox3.getSelectedItem());
-            String debAcct4 = String.valueOf(comboBox4.getSelectedItem());
-            String debAcct5 = String.valueOf(comboBox5.getSelectedItem());
-            String credAcct1 = String.valueOf(comboBox6.getSelectedItem());
-            String credAcct2 = String.valueOf(comboBox7.getSelectedItem());
-            String credAcct3 = String.valueOf(comboBox8.getSelectedItem());
-            String credAcct4 = String.valueOf(comboBox9.getSelectedItem());
-            String credAcct5 = String.valueOf(comboBox10.getSelectedItem());
+            descrip = String.valueOf(textArea1.getText());
+
+            debAcct1 = String.valueOf(comboBox1.getSelectedItem());
+            debAcct2 = String.valueOf(comboBox2.getSelectedItem());
+            debAcct3 = String.valueOf(comboBox3.getSelectedItem());
+            debAcct4 = String.valueOf(comboBox4.getSelectedItem());
+            debAcct5 = String.valueOf(comboBox5.getSelectedItem());
+            credAcct1 = String.valueOf(comboBox6.getSelectedItem());
+            credAcct2 = String.valueOf(comboBox7.getSelectedItem());
+            credAcct3 = String.valueOf(comboBox8.getSelectedItem());
+            credAcct4 = String.valueOf(comboBox9.getSelectedItem());
+            credAcct5 = String.valueOf(comboBox10.getSelectedItem());
 
             System.out.println(debAcct1);
             System.out.println(debAcct2);
@@ -131,11 +169,62 @@ public class TransactionInput extends JDialog {
             System.out.println(credAcct3);
             System.out.println(credAcct4);
             System.out.println(credAcct5);
+
+            String debAmt1String = String.valueOf(textField1.getText());
+            String debAmt2String = String.valueOf(textField2.getText());
+            String debAmt3String = String.valueOf(textField3.getText());
+            String debAmt4String = String.valueOf(textField4.getText());
+            String debAmt5String = String.valueOf(textField5.getText());
+            String credAmt1String = String.valueOf(textField6.getText());
+            String credAmt2String = String.valueOf(textField7.getText());
+            String credAmt3String = String.valueOf(textField8.getText());
+            String credAmt4String = String.valueOf(textField9.getText());
+            String credAmt5String = String.valueOf(textField10.getText());
+
+            /*
+            if(debAmt1String.matches("^-?\\d+\\.?\\d*$")){
+                System.out.println("Text box only contains numbers");
+                onlyAcceptedCharacters = true;
+            } else {
+                System.out.println("Text box contains unaccepted characters");
+            }
+            */
+
+            try{
+                debAmt1 = Double.parseDouble(debAmt1String);
+                debAmt2 = Double.parseDouble(debAmt2String);
+                debAmt3 = Double.parseDouble(debAmt3String);
+                debAmt4 = Double.parseDouble(debAmt4String);
+                debAmt5 = Double.parseDouble(debAmt5String);
+                credAmt1 = Double.parseDouble(credAmt1String);
+                credAmt2 = Double.parseDouble(credAmt2String);
+                credAmt3 = Double.parseDouble(credAmt3String);
+                credAmt4 = Double.parseDouble(credAmt4String);
+                credAmt5 = Double.parseDouble(credAmt5String);
+            } catch(NullPointerException nullPointer){
+                nullPointer.printStackTrace();
+                onlyAcceptedCharacters = false;
+            } catch(NumberFormatException numberFormatException){
+                numberFormatException.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Unacceptable characters in transaction value box(es). Only digits and decimal points are accepted.");
+                onlyAcceptedCharacters = false;
+            }
         } finally {
             dataManager = null;
         }
 
-        dispose();
+        /* CLOSING OUT OF WINDOW */
+        SQLManager dataManagerCommit;
+        if(onlyAcceptedCharacters) {
+            try {
+                dataManagerCommit = new SQLManager();
+                dataManagerCommit.addTransaction(debAcct1, debAmt1, debAcct2, debAmt2, debAcct3, debAmt3, debAcct4, debAmt4, debAcct5, debAmt5, credAcct1, credAmt1, credAcct2, credAmt2,
+                        credAcct3, credAmt3, credAcct4, credAmt4, credAcct5, credAmt5, descrip);
+            } finally {
+                dataManagerCommit = null;
+            }
+            dispose();
+        }
     }
 
     private void onCancel() {

@@ -362,9 +362,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="bc19d" class="javax.swing.JSpinner" binding="spinner1" default-binding="true">
+                  <component id="7b5da" class="javax.swing.JTextField" binding="textField1" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -378,9 +380,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="70a0a" class="javax.swing.JSpinner" binding="spinner2" default-binding="true">
+                  <component id="6a122" class="javax.swing.JTextField" binding="textField2" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -394,9 +398,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="242f7" class="javax.swing.JSpinner" binding="spinner3" default-binding="true">
+                  <component id="f9e2" class="javax.swing.JTextField" binding="textField3" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -410,9 +416,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="53749" class="javax.swing.JSpinner" binding="spinner4" default-binding="true">
+                  <component id="83d83" class="javax.swing.JTextField" binding="textField4" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -426,9 +434,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="64a9f" class="javax.swing.JSpinner" binding="spinner5" default-binding="true">
+                  <component id="3d713" class="javax.swing.JTextField" binding="textField5" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -442,9 +452,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="dfbd7" class="javax.swing.JSpinner" binding="spinner6" default-binding="true">
+                  <component id="4e456" class="javax.swing.JTextField" binding="textField6" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -458,9 +470,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="393f8" class="javax.swing.JSpinner" binding="spinner7" default-binding="true">
+                  <component id="a2e2d" class="javax.swing.JTextField" binding="textField7" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -474,9 +488,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7467e" class="javax.swing.JSpinner" binding="spinner8" default-binding="true">
+                  <component id="13011" class="javax.swing.JTextField" binding="textField8" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -490,9 +506,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="bf5c1" class="javax.swing.JSpinner" binding="spinner9" default-binding="true">
+                  <component id="60028" class="javax.swing.JTextField" binding="textField9" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>
@@ -506,9 +524,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7615b" class="javax.swing.JSpinner" binding="spinner10" default-binding="true">
+                  <component id="fb478" class="javax.swing.JTextField" binding="textField10" default-binding="true">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
                     </constraints>
                     <properties/>
                   </component>

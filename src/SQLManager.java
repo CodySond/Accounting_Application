@@ -254,8 +254,6 @@ public class SQLManager {
                     String CurrentAccountSelected = AccountsSet.getString("ANAME"); // Get name of currently selected account
                     String CurrentAccountType = AccountsSet.getString("ATYPE"); // Get type of currently selected account
 
-                    PreparedStatement simpleJournalUpdate = con.prepareStatement("INSERT INTO TRANS_JOURNAL_SIMPLE(ACCT1, VAL1, ACCT2, VAL2, ACCT3, VAL3, ACCT4, VAL4, " +
-                            "ACCT5, VAL5, ACCT6, VAL6, ACCT7, VAL7, ACCT8, VAL8, ACCT9, VAL9, ACCT10, VAL10, DESCR, TRANSDATE, TRANSTIME) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                     // Put variables into an array, such that can iterate through in for loop
                     for (int i = 0; i<10; i++) {
                         if(CurrentAccountSelected.equals(transAccountNames[i])){ // Check if the account from the set is one of the transaction accounts
@@ -321,7 +319,7 @@ public class SQLManager {
             }
 
         } catch(SQLException e) { } finally {
-            try{ prep.close(); } catch(SQLException e) { }
+            try{ prep.close(); } catch(SQLException e) { } catch(NullPointerException e) { }
             try{ con.close(); } catch(SQLException e) { }
         }
 
@@ -329,5 +327,6 @@ public class SQLManager {
 
     // TODO: IMPORTANT: FIND WAY TO CLOSE CONNECTION AND STATEMENTS!
     // Mostly done, only need to figure out way to do it for returning ResultSet for displayAccounts()
+    // Could have the connection created in a larger object
 
 }

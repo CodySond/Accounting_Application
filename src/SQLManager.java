@@ -252,12 +252,14 @@ public class SQLManager {
             if(AccountsSet != null) { // If the try block above succeeded
                 while (AccountsSet.next()){ // Loop through all the accounts in the accounts set
                     String CurrentAccountSelected = AccountsSet.getString("ANAME"); // Get name of currently selected account
-                    String DebitOrCreditSide = AccountsSet.getString("ATYPE"); // Get type of currently selected account
+                    String CurrentAccountType = AccountsSet.getString("ATYPE"); // Get type of currently selected account
 
+                    PreparedStatement simpleJournalUpdate = con.prepareStatement("INSERT INTO TRANS_JOURNAL_SIMPLE(ACCT1, VAL1, ACCT2, VAL2, ACCT3, VAL3, ACCT4, VAL4, " +
+                            "ACCT5, VAL5, ACCT6, VAL6, ACCT7, VAL7, ACCT8, VAL8, ACCT9, VAL9, ACCT10, VAL10, DESCR, TRANSDATE, TRANSTIME) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                     // Put variables into an array, such that can iterate through in for loop
                     for (int i = 0; i<10; i++) {
                         if(CurrentAccountSelected.equals(transAccountNames[i])){ // Check if the account from the set is one of the transaction accounts
-                            if(DebitOrCreditSide.equals("debit")){
+                            if(CurrentAccountType.equals("asset") || CurrentAccountType.equals("expense")){ // Debit side accounts
                                 // Add debAmt1 to AVALUE
                                 // To add, retrieve integer from table ("AccountsSet.getInt("AVALUE")") and store as variable
                                 // Add debAmt1 to that value from table as variable newvalue
@@ -271,7 +273,7 @@ public class SQLManager {
                                     double currentValue = AccountsSet.getDouble("AVALUE");
                                     newValue = currentValue + transValues[i];
                                     try {
-                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME='" + CurrentAccountSelected + "';");
                                     } finally {
                                         stateTransAndAccountUpdate.close();
                                     }
@@ -279,13 +281,13 @@ public class SQLManager {
                                     double currentValue = AccountsSet.getDouble("AVALUE");
                                     newValue = currentValue - transValues[i];
                                     try {
-                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME='" + CurrentAccountSelected + "';");
                                     } finally {
                                         stateTransAndAccountUpdate.close();
                                     }
                                 }
 
-                            } else if(DebitOrCreditSide.equals("credit")){
+                            } else if(CurrentAccountType.equals("revenue") || CurrentAccountType.equals("liability")){ // Credit side accounts
                                 // Subtract debAmt1 from AVALUE
                                 // See method set out above
 
@@ -295,7 +297,9 @@ public class SQLManager {
                                     double currentValue = AccountsSet.getDouble("AVALUE");
                                     newValue = currentValue + transValues[i];
                                     try {
-                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME='" + CurrentAccountSelected + "';");
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
                                     } finally {
                                         stateTransAndAccountUpdate.close();
                                     }
@@ -303,7 +307,7 @@ public class SQLManager {
                                     double currentValue = AccountsSet.getDouble("AVALUE");
                                     newValue = currentValue - transValues[i];
                                     try {
-                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME=" + CurrentAccountSelected + ";");
+                                        stateTransAndAccountUpdate.execute("UPDATE ACCOUNTS SET AVALUE=" + newValue + " WHERE ANAME='" + CurrentAccountSelected + "';");
                                     } finally {
                                         stateTransAndAccountUpdate.close();
                                     }

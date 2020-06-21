@@ -236,6 +236,6 @@ public class TransactionInput extends JDialog {
         TransactionInput dialog = new TransactionInput();
         dialog.pack();
         dialog.setVisible(true);
-        System.exit(0);
+        //System.exit(0); <- This is what was causing both windows to close when ok or cancel were clicked
     }
 }

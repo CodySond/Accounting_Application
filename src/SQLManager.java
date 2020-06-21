@@ -12,8 +12,16 @@ public class SQLManager {
     private static boolean hasData = false;
 
     /* DATABASE FUNCTIONS */
+
+    /**
+     * Retrieves all the content from the "accounts" table, including the name, type, and value of each account
+     *
+     * @return ResultSet containing the content of table "accounts"
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public ResultSet displayAccounts() throws SQLException, ClassNotFoundException {
-        if(con == null) {
+        if(con == null || con.isClosed()) {
             getConnection();
         }
 
@@ -31,6 +39,12 @@ public class SQLManager {
 
     }
 
+    /**
+     * Establishes connection to database for object "con", which is an object of the parent method/class
+     *
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     private void getConnection() throws SQLException, ClassNotFoundException { // Shouldn't close connection, as that would make this not work
         // Tells Java which driver to use
         Class.forName("org.h2.Driver");
@@ -40,6 +54,10 @@ public class SQLManager {
         initialize();
     }
 
+    /**
+     * Does initial checks to see if the required tables exist in the database; is called by getConnection() method
+     * @throws SQLException
+     */
     private void initialize() throws SQLException { // Shouldn't close connection because it is part of getConnection() method
         if (!hasData){
             hasData = true;
@@ -157,6 +175,16 @@ public class SQLManager {
     }
 
     // "addAccount(...)" is used to add new accounts to the database
+
+    /**
+     * Adds a new account to the "accounts" table of the database
+     *
+     * @param accountName Name of the new account (case-sensitive)
+     * @param accountType What kind of account this account is (options: asset, revenue, expense, liability)
+     * @param accountValue The initial value of the new account; should usually be 0
+     * @throws SQLException
+     * @throws ClassNotFoundException
+     */
     public void addAccount(String accountName, String accountType, int accountValue) throws SQLException, ClassNotFoundException {
         // Checks for database connection. If it doesn't exist, it connects to database
         if(con == null){
@@ -185,6 +213,32 @@ public class SQLManager {
 
     }
 
+    /**
+     * Adds a new transaction to the database and updates the "AVALUE" column of "accounts" table
+     * Order of accounts in parameters doesn't matter so long as they are in the right section (debit/credit)
+     *
+     * @param debAcct1 Account to be debited
+     * @param debAmt1 Amount to be debited to account of matching number
+     * @param debAcct2 Account to be debited
+     * @param debAmt2 Amount to be debited to account of matching number
+     * @param debAcct3 Account to be debited
+     * @param debAmt3 Amount to be debited to account of matching number
+     * @param debAcct4 Account to be debited
+     * @param debAmt4 Amount to be debited to account of matching number
+     * @param debAcct5 Account to be debited
+     * @param debAmt5 Amount to be debited to account of matching number
+     * @param credAcct1 Account to be credited
+     * @param credAmt1 Account to be credited to account of matching number
+     * @param credAcct2 Account to be credited
+     * @param credAmt2 Account to be credited to account of matching number
+     * @param credAcct3 Account to be credited
+     * @param credAmt3 Account to be credited to account of matching number
+     * @param credAcct4 Account to be credited
+     * @param credAmt4 Account to be credited to account of matching number
+     * @param credAcct5 Account to be credited
+     * @param credAmt5 Account to be credited to account of matching number
+     * @param descr Description of the transaction
+     */
     public void addTransaction(String debAcct1, double debAmt1, String debAcct2, double debAmt2, String debAcct3, double debAmt3, String debAcct4, double debAmt4,
                                String debAcct5, double debAmt5, String credAcct1, double credAmt1, String credAcct2, double credAmt2, String credAcct3, double credAmt3,
                                String credAcct4, double credAmt4, String credAcct5, double credAmt5, String descr){

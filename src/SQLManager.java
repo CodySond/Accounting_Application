@@ -1,6 +1,7 @@
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.*;
+import java.util.Arrays;
 
 // TODO: Either add in error correction to correct floating point errors with the stored value of accounts or change the value to represent cents (only 3 countries use thousandths of currency)
 // Re: above note: possibly not necessary, as it seems that floating point is accurate for addition and subtraction with the two decimal places that this uses.
@@ -345,7 +346,7 @@ public class SQLManager {
 
                                 double newValue;
                                 Statement stateTransAndAccountUpdate = con.createStatement();
-                                if(i>5){ // Check if it is in the credit side
+                                if(i>=5){ // Check if it is in the credit side
                                     double currentValue = AccountsSet.getDouble("AVALUE");
                                     newValue = currentValue + transValues[i];
                                     try {
@@ -379,6 +380,50 @@ public class SQLManager {
 
     }
 
+
+    public void deleteAllTables(){
+        if(con == null){
+            try {
+                getConnection();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Statement accountsStatement = null;
+        Statement transStatement = null;
+        Statement simpleTransStatement = null;
+        try{
+            accountsStatement = con.createStatement();
+            accountsStatement.execute("DROP TABLE ACCOUNTS;");
+
+            transStatement = con.createStatement();
+            transStatement.execute("DROP TABLE TRANSACTIONS_JOURNAL;");
+
+            simpleTransStatement = con.createStatement();
+            simpleTransStatement.execute("DROP TABLE TRANS_JOURNAL_SIMPLE;");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+
+            hasData = false;
+
+            // Recreate tables
+            try { initialize(); } catch (SQLException throwables) { throwables.printStackTrace(); }
+
+            // Close statements & connection
+            try {
+                accountsStatement.close();
+                transStatement.close();
+                simpleTransStatement.close();
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+    }
     // TODO: IMPORTANT: FIND WAY TO CLOSE CONNECTION AND STATEMENTS!
     // Mostly done, only need to figure out way to do it for returning ResultSet for displayAccounts()
     // Could have the connection created in a larger object

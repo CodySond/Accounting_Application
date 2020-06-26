@@ -12,6 +12,7 @@ public class MainScreen {
     private JButton addAccountButton;
 
     private JPanel panelMain;
+    private JButton clearDataButton;
 
     private String newAccount;
     private String newAccountType;
@@ -76,6 +77,17 @@ public class MainScreen {
                     ex.printStackTrace(); // Prints error to console
                 } finally { // Runs after everything else in the try catch structure has run
                     dataManager = null; // Closes out the dataManager object
+                }
+            }
+        });
+        clearDataButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int reply = JOptionPane.showConfirmDialog(null, "Do you really want to delete all the data in this program?\nThis CANNOT be undone!", "Confirm deletion", JOptionPane.YES_NO_OPTION);
+                if(reply == JOptionPane.YES_OPTION){
+                    SQLManager dataManager = new SQLManager();
+                    dataManager.deleteAllTables();
+                    dataManager = null;
                 }
             }
         });

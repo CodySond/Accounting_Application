@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.sql.*;
 
 
@@ -22,7 +21,7 @@ public class MainScreen {
 
     public MainScreen() {
         // TODO: Make display graphs for comparing income & expenses
-        // Note: probably use JFreeChart
+        // Note: maybe use JFreeChart, JavaFX, or move over to Electron; might even use swing painting
 
         /*
 
@@ -34,13 +33,8 @@ public class MainScreen {
         inputTransactionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Shows a pop out window that shows the message
-                //        JOptionPane.showMessageDialog(null, "Hello");
-                // TODO: (After database has been made) Transaction input screen. Type account name first, which is verified by array containing all account names from database, then amount
-                // Note: Could do new window similar to this one in order to have a list of radio buttons to select account
-                TransactionInput transInputObject = new TransactionInput();
                 String[] transInputArgs = new String[] {"THIS IS ONLY TO CALL IT FROM ANOTHER CLASS"};
-                transInputObject.main(transInputArgs);
+                TransactionInput.main(transInputArgs);
             }
         });
 
@@ -96,6 +90,7 @@ public class MainScreen {
 
     /* MAIN METHOD */
     public static void main(String[] args){
+        /* // Commented out because it is no longer useful
         // Initializing objects to display accounts in command line
         SQLManager dataManager = new SQLManager();
         ResultSet rs;
@@ -114,6 +109,7 @@ public class MainScreen {
         } catch (ClassNotFoundException e) {
             e.printStackTrace(); // Prints error message to console
         }
+        */
 
         /* DISPLAY STUFF */
 

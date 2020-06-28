@@ -3,9 +3,6 @@ import java.sql.*;
 import java.time.*;
 import java.util.Arrays;
 
-// TODO: Either add in error correction to correct floating point errors with the stored value of accounts or change the value to represent cents (only 3 countries use thousandths of currency)
-// Re: above note: possibly not necessary, as it seems that floating point is accurate for addition and subtraction with the two decimal places that this uses.
-
 public class SQLManager {
 
     //Database stuff
@@ -421,11 +418,10 @@ public class SQLManager {
                 con.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
     }
-    // TODO: IMPORTANT: FIND WAY TO CLOSE CONNECTION AND STATEMENTS!
-    // Mostly done, only need to figure out way to do it for returning ResultSet for displayAccounts()
-    // Could have the connection created in a larger object
 
 }

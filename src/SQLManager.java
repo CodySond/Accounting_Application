@@ -11,6 +11,19 @@ public class SQLManager {
 
     /* DATABASE FUNCTIONS */
 
+    private void checkConnection(){
+        try {
+            if(con == null || con.isClosed()){
+                try { getConnection(); } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * Retrieves all the content from the "accounts" table, including the name, type, and value of each account
      *
@@ -172,7 +185,6 @@ public class SQLManager {
         System.out.println("Database exists. Initialization complete");
     }
 
-    // "addAccount(...)" is used to add new accounts to the database
 
     /**
      * Adds a new account to the "accounts" table of the database
@@ -309,7 +321,7 @@ public class SQLManager {
                     // Put variables into an array, such that can iterate through in for loop
                     for (int i = 0; i<10; i++) {
                         if(CurrentAccountSelected.equals(transAccountNames[i])){ // Check if the account from the set is one of the transaction accounts
-                            if(CurrentAccountType.equals("asset") || CurrentAccountType.equals("expense")){ // Debit side accounts
+                            if(CurrentAccountType.equals("asset") || CurrentAccountType.equals("expense") || CurrentAccountType.equals("ownerwithdrawal")){ // Debit side accounts
                                 // Add debAmt1 to AVALUE
                                 // To add, retrieve integer from table ("AccountsSet.getInt("AVALUE")") and store as variable
                                 // Add debAmt1 to that value from table as variable newvalue
@@ -337,7 +349,7 @@ public class SQLManager {
                                     }
                                 }
 
-                            } else if(CurrentAccountType.equals("revenue") || CurrentAccountType.equals("liability")){ // Credit side accounts
+                            } else if(CurrentAccountType.equals("revenue") || CurrentAccountType.equals("liability") || CurrentAccountType.equals("ownerequity")){ // Credit side accounts
                                 // Subtract debAmt1 from AVALUE
                                 // See method set out above
 
@@ -378,6 +390,9 @@ public class SQLManager {
     }
 
 
+    /**
+     * Deletes all tables in the database and then recreates them as empty
+     */
     public void deleteAllTables(){
         if(con == null){
             try {

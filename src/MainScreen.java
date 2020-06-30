@@ -42,15 +42,18 @@ public class MainScreen {
         addAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String[] newAcctArgs = new String[] {"ONLY TO CALL FROM ANOTHER CLASS"};
+                CreateNewAccount.main(newAcctArgs);
+                /*
                 // Shows pop out window to input name of new account
                 newAccount = JOptionPane.showInputDialog(null, "What is the account name that you want to add?");
 
                 // Shows new pop out to allow the user to specify the type of account
-                newAccountType = JOptionPane.showInputDialog(null, "What type would you like " + newAccount + " to be? Revenue, expense, asset, or liability?");
+                newAccountType = JOptionPane.showInputDialog(null, "What type would you like " + newAccount + " to be? Revenue, expense, asset, liability, owner's equity, or owner's withdrawals?");
                 // Ensures that case matches what we are expecting
                 newAccountType = newAccountType.toLowerCase();
                 // Checks that the input account type is something we know how to handle (will bypass if so, will ask again if not)
-                while(!newAccountType.equals("revenue") && !newAccountType.equals("expense") && !newAccountType.equals("asset") && !newAccountType.equals("liability")){
+                while(!newAccountType.equals("revenue") && !newAccountType.equals("expense") && !newAccountType.equals("asset") && !newAccountType.equals("liability") && !newAccountType.equals("")){
                     newAccountType = JOptionPane.showInputDialog(null, "Input not recognized. Input the type exactly as shown below: \nRevenue\nExpense\nAsset\nLiability");
                     newAccountType = newAccountType.toLowerCase();
                 }
@@ -72,6 +75,7 @@ public class MainScreen {
                 } finally { // Runs after everything else in the try catch structure has run
                     dataManager = null; // Closes out the dataManager object
                 }
+                 */
             }
         });
         clearDataButton.addActionListener(new ActionListener() {

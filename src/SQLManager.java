@@ -1,4 +1,5 @@
 import javax.swing.plaf.nimbus.State;
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.time.*;
 import java.util.Arrays;
@@ -24,6 +25,7 @@ public class SQLManager {
             e.printStackTrace();
         }
     }
+
     /**
      * Retrieves all the content from the "accounts" table, including the name, type, and value of each account
      *
@@ -437,6 +439,113 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Closes temporary accounts at the end of the account period. Does not use or create an income summary account
+     *
+     * @param ownerEquityAccountName
+     */
+    public void closeAccounts(String ownerEquityAccountName){
+        // Makes sure that there is a connection to the database
+        checkConnection();
+
+        // Creating ResultSets for each of the account types that will be closed (REID excluding the I)
+        ResultSet rsRevenueAccounts = null;
+        ResultSet rsExpenseAccounts = null;
+        ResultSet rsWithdrawalAccounts = null;
+        Statement retrieverStatement = null;
+
+        // Create variable to be used as the income summary account
+        double incomeSummary = 0.0;
+
+        try {
+            String rsCurrentAcct;
+            double rsCurrentValue;
+
+            retrieverStatement = con.createStatement(); // Establish retrieverStatement as a statement for the "con" connection
+
+            // Populate result sets with the proper accounts
+            rsRevenueAccounts = retrieverStatement.executeQuery("SELECT * FROM ACCOUNTS WHERE ATYPE='revenue';");
+            rsExpenseAccounts = retrieverStatement.executeQuery("SELECT * FROM ACCOUNTS WHERE ATYPE='expense';");
+            rsWithdrawalAccounts = retrieverStatement.executeQuery("SELECT * FROM ACCOUNTS WHERE ATYPE='ownerwithdrawal';");
+
+            while(rsRevenueAccounts.next()){
+                // Retrieve the currently selected account and its value
+                rsCurrentAcct = rsRevenueAccounts.getString("ANAME");
+                rsCurrentValue = rsRevenueAccounts.getDouble("AVALUE");
+
+                // Add the revenue on to the incomeSummary
+                incomeSummary += rsCurrentValue;
+
+                // Transaction to update database, zeroing out revenue and adding it to the owner's equity account
+                addTransaction(rsCurrentAcct, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, ownerEquityAccountName, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, "Close revenue account " + rsCurrentAcct + " into " + ownerEquityAccountName + ".");
+            }
+
+            while(rsExpenseAccounts.next()){
+                rsCurrentAcct = rsExpenseAccounts.getString("ANAME");
+                rsCurrentValue = rsExpenseAccounts.getDouble("AVALUE");
+
+                incomeSummary -= rsCurrentValue;
+
+                addTransaction(ownerEquityAccountName, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, rsCurrentAcct, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, "Close expense account " + rsCurrentAcct + " into " + ownerEquityAccountName + ".");
+            }
+
+            while(rsWithdrawalAccounts.next()){
+                rsCurrentAcct = rsWithdrawalAccounts.getString("ANAME");
+                rsCurrentValue = rsWithdrawalAccounts.getDouble("AVALUE");
+
+                addTransaction(ownerEquityAccountName, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, rsCurrentAcct, rsCurrentValue, " ", 0, " ", 0, " ", 0,
+                        " ", 0, "Close withdrawal account " + rsCurrentAcct + " into " + ownerEquityAccountName + ".");
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            if(rsRevenueAccounts != null){
+                try {
+                    rsRevenueAccounts.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+
+            if(rsExpenseAccounts != null){
+                try {
+                    rsExpenseAccounts.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+
+            if(rsWithdrawalAccounts != null){
+                try {
+                    rsWithdrawalAccounts.close();
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            }
+
+            if(retrieverStatement != null){
+                if(retrieverStatement != null){
+                    try {
+                        retrieverStatement.close();
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                }
+            }
+
+            try { con.close(); } catch (SQLException throwables) { throwables.printStackTrace(); }
+
+
+        }
+
     }
 
 }

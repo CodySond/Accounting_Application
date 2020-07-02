@@ -12,6 +12,7 @@ public class MainScreen {
 
     private JPanel panelMain;
     private JButton clearDataButton;
+    private JButton closeAccountsButton;
 
     private String newAccount;
     private String newAccountType;
@@ -87,6 +88,13 @@ public class MainScreen {
                     dataManager.deleteAllTables();
                     dataManager = null;
                 }
+            }
+        });
+
+        closeAccountsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }

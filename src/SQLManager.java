@@ -53,6 +53,24 @@ public class SQLManager {
     }
 
     /**
+     * Returns a limited ResultSet of the accounts table using where clause
+     * @param limiter Bit that goes after "WHERE" in SQL statement, space is already included as is the semi-colon at the end
+     * @return Returns limited account set for those that fit the where clause
+     */
+    public ResultSet displayLimitedAccounts(String limiter){
+        checkConnection();
+        ResultSet result = null;
+
+        try {
+            Statement state = con.createStatement();
+            result = state.executeQuery("SELECT * FROM ACCOUNTS WHERE " + limiter + ";");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
      * Establishes connection to database for object "con", which is an object of the parent method/class
      *
      * @throws SQLException

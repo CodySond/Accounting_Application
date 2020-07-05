@@ -13,6 +13,7 @@ public class MainScreen {
     private JPanel panelMain;
     private JButton clearDataButton;
     private JButton closeAccountsButton;
+    private JButton createTrialBalanceButton;
 
     private String newAccount;
     private String newAccountType;
@@ -95,6 +96,12 @@ public class MainScreen {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+        createTrialBalanceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FinancialReportCreator.createTrialBalance();
             }
         });
     }

@@ -16,7 +16,7 @@ public class FinancialReportCreator {
         ResultSet rsOwnerWithdrawalsAccounts = null;
 
         try {
-            String filename = "C:/TrialBalance.xls";
+            String filename = "C:/Accounting/TrialBalance.xls";
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.createSheet("Trial Balance");
 
@@ -100,7 +100,14 @@ public class FinancialReportCreator {
             rowhead.createCell(1).setCellValue("=SUM(B3:B" + (rowNumber-1) + ")");
             rowhead.createCell(2).setCellValue("=SUM(C3:B" + (rowNumber-1) + ")");
 
-            FileOutputStream fileOut = new FileOutputStream(filename);
+            File file = new File(filename);
+            File folder = new File("C:/Accounting/");
+
+            folder.mkdirs();
+            if(!file.canWrite()){
+                file.setWritable(true);
+            }
+            FileOutputStream fileOut = new FileOutputStream(file);
             workbook.write(fileOut);
             fileOut.close();
             workbook.close();

@@ -16,6 +16,7 @@ public class FinancialReportCreator {
         ResultSet rsOwnerWithdrawalsAccounts = null;
 
         try {
+            /*
             String filename = "C:/Accounting/TrialBalance.xls";
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.createSheet("Trial Balance");
@@ -34,6 +35,8 @@ public class FinancialReportCreator {
             rowhead.createCell(1).setCellValue("Debit value");
             rowhead.createCell(2).setCellValue("Credit value");
 
+             */
+
             /* AUTOMATED WRITING OF ACCOUNTS & THEIR VALUES */
             dataManager = new SQLManager();
             rsAssetAccounts = dataManager.displayLimitedAccounts("ATYPE='asset'");
@@ -42,9 +45,43 @@ public class FinancialReportCreator {
             rsLiabilitiesAccounts = dataManager.displayLimitedAccounts("ATYPE='liability'");
             rsOwnerEquityAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerequity'");
             rsOwnerWithdrawalsAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerwithdrawal'");
+            FileWriter writer = new FileWriter("TrialBalance.txt");
 
-            int rowNumber = 4; // Tracks what row we are currently on
+            double debitSideTotal = 0.0;
+            double creditSideTotal = 0.0;
 
+            writer.write("Trial Balance\n\nDEBIT SIDE\n");
+            while(rsAssetAccounts.next()){
+                writer.write(rsAssetAccounts.getString("ANAME") + ": " + rsAssetAccounts.getDouble("AVALUE") + "\n");
+                debitSideTotal += rsAssetAccounts.getDouble("AVALUE");
+            }
+            while(rsExpenseAccounts.next()){
+                writer.write(rsExpenseAccounts.getString("ANAME") + ": " + rsExpenseAccounts.getDouble("AVALUE") + "\n");
+                debitSideTotal += rsExpenseAccounts.getDouble("AVALUE");
+            }
+            while(rsOwnerWithdrawalsAccounts.next()){
+                writer.write(rsOwnerWithdrawalsAccounts.getString("ANAME") + ": " + rsOwnerWithdrawalsAccounts.getDouble("AVALUE") + "\n");
+                debitSideTotal += rsOwnerWithdrawalsAccounts.getDouble("AVALUE");
+            }
+            writer.write("Debit side total: " + debitSideTotal + "\n\nCREDIT SIDE\n");
+
+            while(rsLiabilitiesAccounts.next()){
+                writer.write(rsLiabilitiesAccounts.getString("ANAME") + ": " + rsLiabilitiesAccounts.getDouble("AVALUE") + "\n");
+                creditSideTotal += rsLiabilitiesAccounts.getDouble("AVALUE");
+            }
+            while(rsRevenueAccounts.next()){
+                writer.write(rsRevenueAccounts.getString("ANAME") + ": " + rsRevenueAccounts.getDouble("AVALUE") + "\n");
+                creditSideTotal += rsRevenueAccounts.getDouble("AVALUE");
+            }
+            while(rsOwnerEquityAccounts.next()){
+                writer.write(rsOwnerEquityAccounts.getString("ANAME") + ": " + rsOwnerEquityAccounts.getDouble("AVALUE") + "\n");
+                creditSideTotal += rsOwnerEquityAccounts.getDouble("AVALUE");
+            }
+            writer.write("Credit side total: " + creditSideTotal + "\n");
+            writer.close();
+            //int rowNumber = 4; // Tracks what row we are currently on
+
+            /* Commented out because it doesn't work (produces corrupted .xls file
             // Debit side accounts
             while(rsAssetAccounts.next()){
                 rowhead = sheet.createRow(rowNumber);
@@ -109,8 +146,10 @@ public class FinancialReportCreator {
             }
             FileOutputStream fileOut = new FileOutputStream(file);
             workbook.write(fileOut);
-            fileOut.close();
             workbook.close();
+            fileOut.close();
+
+            */
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -16,26 +16,42 @@ public class FinancialReportCreator {
         ResultSet rsOwnerWithdrawalsAccounts = null;
 
         try {
-            /*
+
             String filename = "C:/Accounting/TrialBalance.xls";
             HSSFWorkbook workbook = new HSSFWorkbook();
             HSSFSheet sheet = workbook.createSheet("Trial Balance");
 
+            File file = new File(filename);
+            File folder = new File("C:/Accounting/");
+
+            folder.mkdirs();
+            if(!file.canWrite()){
+                file.setWritable(true);
+            }
+            FileOutputStream fileOut = new FileOutputStream(file);
+
             HSSFRow rowhead = sheet.createRow(0);
             rowhead.createCell(0).setCellValue("Trial Balance");
+            //workbook.write(fileOut);
 
             rowhead = sheet.createRow(1);
             rowhead.createCell(0).setCellValue("Placeholder company name");
+            //workbook.write(fileOut);
+            System.out.println("Row 2 complete");
 
             rowhead = sheet.createRow(2);
             rowhead.createCell(0).setCellValue("Date goes here");
+            //workbook.write(fileOut);
+            System.out.println("Row 3 complete");
 
             rowhead = sheet.createRow(3);
             rowhead.createCell(0).setCellValue("Account name");
             rowhead.createCell(1).setCellValue("Debit value");
             rowhead.createCell(2).setCellValue("Credit value");
+            //workbook.write(fileOut);
+            System.out.println("Row 4 complete");
 
-             */
+
 
             /* AUTOMATED WRITING OF ACCOUNTS & THEIR VALUES */
             dataManager = new SQLManager();
@@ -45,6 +61,87 @@ public class FinancialReportCreator {
             rsLiabilitiesAccounts = dataManager.displayLimitedAccounts("ATYPE='liability'");
             rsOwnerEquityAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerequity'");
             rsOwnerWithdrawalsAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerwithdrawal'");
+
+            int rowNumber = 4; // Tracks what row we are currently on
+
+            System.out.println("Reached loops");
+            // Debit side accounts
+            while(rsAssetAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsAssetAccounts.getString("ANAME"));
+                rowhead.createCell(1).setCellValue(rsAssetAccounts.getDouble("AVALUE"));
+
+                System.out.println("Asset account written");
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            while(rsExpenseAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsExpenseAccounts.getString("ANAME"));
+                rowhead.createCell(1).setCellValue(rsExpenseAccounts.getDouble("AVALUE"));
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            while(rsOwnerWithdrawalsAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsOwnerWithdrawalsAccounts.getString("ANAME"));
+                rowhead.createCell(1).setCellValue(rsOwnerWithdrawalsAccounts.getDouble("AVALUE"));
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            /* Credit side accounts */
+            while(rsLiabilitiesAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsLiabilitiesAccounts.getString("ANAME"));
+                rowhead.createCell(2).setCellValue(rsLiabilitiesAccounts.getDouble("AVALUE"));
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            while(rsRevenueAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsRevenueAccounts.getString("ANAME"));
+                rowhead.createCell(2).setCellValue(rsRevenueAccounts.getDouble("AVALUE"));
+
+                System.out.println("Revenue account written");
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            while(rsOwnerEquityAccounts.next()){
+                rowhead = sheet.createRow(rowNumber);
+                rowhead.createCell(0).setCellValue(rsOwnerEquityAccounts.getString("ANAME"));
+                rowhead.createCell(2).setCellValue(rsOwnerEquityAccounts.getDouble("AVALUE"));
+
+                rowNumber++;
+                //workbook.write(fileOut);
+            }
+
+            rowhead = sheet.createRow(rowNumber);
+            rowhead.createCell(0).setCellValue("Totals:");
+            rowhead.createCell(1).setCellFormula("SUM(B3:B" + (rowNumber-1) + ")");
+            rowhead.createCell(2).setCellFormula("SUM(C3:B" + (rowNumber-1) + ")");
+            workbook.write(fileOut);
+
+            workbook.close();
+            fileOut.close();
+
+            // Reset ResultSets for use in the text file version
+            rsAssetAccounts = dataManager.displayLimitedAccounts("ATYPE='asset'");
+            rsExpenseAccounts = dataManager.displayLimitedAccounts("ATYPE='expense'");
+            rsRevenueAccounts = dataManager.displayLimitedAccounts("ATYPE='revenue'");
+            rsLiabilitiesAccounts = dataManager.displayLimitedAccounts("ATYPE='liability'");
+            rsOwnerEquityAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerequity'");
+            rsOwnerWithdrawalsAccounts = dataManager.displayLimitedAccounts("ATYPE='ownerwithdrawal'");
+
             FileWriter writer = new FileWriter("TrialBalance.txt");
 
             double debitSideTotal = 0.0;
@@ -79,80 +176,21 @@ public class FinancialReportCreator {
             }
             writer.write("Credit side total: " + creditSideTotal + "\n");
             writer.close();
-            //int rowNumber = 4; // Tracks what row we are currently on
-
-            /* Commented out because it doesn't work (produces corrupted .xls file
-            // Debit side accounts
-            while(rsAssetAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsAssetAccounts.getString("ANAME"));
-                rowhead.createCell(1).setCellValue(rsAssetAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            while(rsExpenseAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsExpenseAccounts.getString("ANAME"));
-                rowhead.createCell(1).setCellValue(rsExpenseAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            while(rsOwnerWithdrawalsAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsOwnerWithdrawalsAccounts.getString("ANAME"));
-                rowhead.createCell(1).setCellValue(rsOwnerWithdrawalsAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            // Credit side accounts
-            while(rsLiabilitiesAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsLiabilitiesAccounts.getString("ANAME"));
-                rowhead.createCell(2).setCellValue(rsLiabilitiesAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            while(rsRevenueAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsRevenueAccounts.getString("ANAME"));
-                rowhead.createCell(2).setCellValue(rsRevenueAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            while(rsOwnerEquityAccounts.next()){
-                rowhead = sheet.createRow(rowNumber);
-                rowhead.createCell(0).setCellValue(rsOwnerEquityAccounts.getString("ANAME"));
-                rowhead.createCell(2).setCellValue(rsOwnerEquityAccounts.getDouble("AVALUE"));
-
-                rowNumber++;
-            }
-
-            rowhead = sheet.createRow(rowNumber);
-            rowhead.createCell(0).setCellValue("Totals:");
-            rowhead.createCell(1).setCellValue("=SUM(B3:B" + (rowNumber-1) + ")");
-            rowhead.createCell(2).setCellValue("=SUM(C3:B" + (rowNumber-1) + ")");
-
-            File file = new File(filename);
-            File folder = new File("C:/Accounting/");
-
-            folder.mkdirs();
-            if(!file.canWrite()){
-                file.setWritable(true);
-            }
-            FileOutputStream fileOut = new FileOutputStream(file);
-            workbook.write(fileOut);
-            workbook.close();
-            fileOut.close();
-
-            */
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                rsAssetAccounts.close();
+                rsExpenseAccounts.close();
+                rsLiabilitiesAccounts.close();
+                rsOwnerEquityAccounts.close();
+                rsOwnerWithdrawalsAccounts.close();
+                rsRevenueAccounts.close();
+                dataManager = null;
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
         }
     }
 }
